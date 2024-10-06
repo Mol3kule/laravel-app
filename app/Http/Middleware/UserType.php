@@ -24,6 +24,10 @@ class UserType
             return $next($request);
         }
 
+        if ($type === 'admin' && $user->isAdmin()) {
+            return $next($request);
+        }
+
         return redirect()->route('dashboard');
     }
 }

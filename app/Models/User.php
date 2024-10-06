@@ -50,11 +50,11 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->type === UserType::Admin;
+        return $this->type === UserType::Admin->value;
     }
 
     public function isEmployer(): bool
     {
-        return $this->type === UserType::Employer;
+        return $this->type === UserType::Employer->value;
     }
 }

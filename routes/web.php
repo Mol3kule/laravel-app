@@ -16,14 +16,15 @@ Route::get('/', function () {
 });
 
 Route::group([
-    'middleware' => ['auth', 'verified', 'type:user', 'type:user,employee'],
+    'middleware' => ['auth', 'verified'],
 ], function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
     Route::group([
-        'prefix' => '/admin'
+        'prefix' => '/admin',
+        'middleware' => 'type:admin'
     ], function () {
         Route::get('/users_control_panel', function () {
             return Inertia::render('Admin/UsersControlPanel');
