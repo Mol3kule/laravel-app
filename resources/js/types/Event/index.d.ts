@@ -5,5 +5,5 @@ export type Event = {
     start: number;
     users: {
         name: string;
-    }
+    }[]
 }

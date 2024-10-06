@@ -22,6 +22,8 @@ Route::group([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
+    Route::get('/event/{id}', [EventController::class, 'getById'])->name('event.view');
+
     Route::group([
         'prefix' => '/admin',
         'middleware' => 'type:admin'
