@@ -40,12 +40,6 @@ export default function Authenticated({
                                         >
                                             Users control panel
                                         </NavLink>
-                                        <NavLink
-                                            href={route('events_control_panel')}
-                                            active={route().current('events_control_panel')}
-                                        >
-                                            Events control panel
-                                        </NavLink>
                                     </>
                                 )}
                             </div>

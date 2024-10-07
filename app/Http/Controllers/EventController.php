@@ -10,7 +10,7 @@ class EventController extends Controller
 {
     public function index(Request $request): \Inertia\Response
     {
-        return Inertia::render('Admin/EventsControlPanel', [
+        return Inertia::render('Dashboard', [
             'data' => Event::all()
         ]);
     }

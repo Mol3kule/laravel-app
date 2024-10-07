@@ -18,9 +18,7 @@ Route::get('/', function () {
 Route::group([
     'middleware' => ['auth', 'verified'],
 ], function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [EventController::class, 'index'])->name('dashboard');
 
     Route::get('/event/{id}', [EventController::class, 'getById'])->name('event.view');
 
@@ -31,8 +29,6 @@ Route::group([
         Route::get('/users_control_panel', function () {
             return Inertia::render('Admin/UsersControlPanel');
         })->name('users_control_panel');
-
-        Route::get('/events_control_panel', [EventController::class, 'index'])->name('events_control_panel');
     });
 });
 
