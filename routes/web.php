@@ -20,7 +20,13 @@ Route::group([
 ], function () {
     Route::get('/dashboard', [EventController::class, 'index'])->name('dashboard');
 
-    Route::get('/event/{id}', [EventController::class, 'getById'])->name('event.view');
+    Route::group([
+        'prefix' => 'event',
+    ], function () {
+        Route::get('/{id}', [EventController::class, 'getById'])->name('event.view');
+        Route::delete('/{eventId}', [EventController::class, 'delete'])->name('event.delete');
+        Route::delete('/{eventId}/{userId}', [EventController::class, 'dropUser'])->name('event.drop.user');
+    });
 
     Route::group([
         'prefix' => '/admin',
@@ -37,7 +43,5 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-//Route::middleware(['auth', 'role:admin'])
 
 require __DIR__ . '/auth.php';

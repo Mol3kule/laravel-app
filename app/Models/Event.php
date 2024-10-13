@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property array<int> $users
+ */
 class Event extends Model
 {
 
@@ -19,8 +22,18 @@ class Event extends Model
         'users'
     ];
 
-    protected $casts = [
-        'start' => 'datetime',
-        'users' => 'array'
-    ];
+    protected function casts(): array
+    {
+        return [
+            'start' => 'datetime',
+            'users' => 'array'
+        ];
+    }
+
+    public function getUsersAttribute()
+    {
+        return User::whereIn('id', json_decode($this->attributes['users']) ?? [])
+            ->select('id', 'name')
+            ->get();
+    }
 }

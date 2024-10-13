@@ -4,6 +4,7 @@ export type Event = {
     description: string;
     start: number;
     users: {
+        id: number;
         name: string;
     }[]
 }

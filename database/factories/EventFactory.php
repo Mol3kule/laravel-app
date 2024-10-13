@@ -20,7 +20,7 @@ class EventFactory extends Factory
         return [
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraph(),
-            'start' => Carbon::now()->addMinutes(500)->timestamp,
+            'start' => Carbon::now()->addDays(30),
         ];
     }
 }
