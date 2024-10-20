@@ -21,10 +21,13 @@ Route::group([
     Route::get('/dashboard', [EventController::class, 'index'])->name('dashboard');
 
     Route::group([
-        'prefix' => 'event',
+        'prefix' => '/event',
     ], function () {
+        Route::get('/create', [EventController::class, 'createIndex'])->name('event.create.index')->middleware('type:admin');
+        Route::post('/create', [EventController::class, 'createEvent'])->name('event.create.submit')->middleware('type:admin');
         Route::get('/{id}', [EventController::class, 'getById'])->name('event.view');
         Route::delete('/{eventId}', [EventController::class, 'delete'])->name('event.delete');
+        Route::patch('/{eventId}', [EventController::class, 'toggleJoin'])->name('event.toggle.join');
         Route::delete('/{eventId}/{userId}', [EventController::class, 'dropUser'])->name('event.drop.user');
     });
 

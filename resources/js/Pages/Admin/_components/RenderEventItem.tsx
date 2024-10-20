@@ -3,6 +3,7 @@ import {User} from "@/types/User";
 import {Link, useForm} from "@inertiajs/react";
 import DangerButton from "@/Components/DangerButton";
 import {FormEvent, FormEventHandler} from "react";
+import PrimaryButton from "@/Components/PrimaryButton";
 
 interface Props {
     auth: {
@@ -12,7 +13,7 @@ interface Props {
 }
 
 export const RenderEventItem = ({auth, data}: Props) => {
-    const {delete: destroy} = useForm();
+    const {delete: destroy, patch} = useForm();
 
     const isInPage = route().current('event.view');
     const isAdmin = auth.user.type === 'admin';
@@ -26,7 +27,14 @@ export const RenderEventItem = ({auth, data}: Props) => {
 
     const handleDestroy: FormEventHandler = (e) => {
         e.preventDefault();
-        destroy(route('event.delete', { eventId: data.id }));
+        destroy(route('event.delete', {eventId: data.id}));
+    }
+
+    const isUserInEvent = data.users.find((user) => user.id === auth.user.id);
+
+    const handleToggleJoinEvent: FormEventHandler = (e) => {
+        e.preventDefault();
+        patch(route('event.toggle.join', {eventId: data.id}));
     }
 
     return (
@@ -55,8 +63,9 @@ export const RenderEventItem = ({auth, data}: Props) => {
                                                   className={"flex gap-2 items-center"}>
                                                 <span>- {user.name}</span>
                                                 {isAdmin && (
-                                                    <DangerButton className={"bg-transparent"}>Remove
-                                                        User</DangerButton>
+                                                    <DangerButton className={"bg-transparent"}>
+                                                        Remove User
+                                                    </DangerButton>
                                                 )}
                                             </form>
                                         ))}
@@ -73,9 +82,20 @@ export const RenderEventItem = ({auth, data}: Props) => {
                 </>
             )}
             {isAdmin && isInPage && (
-                <form onSubmit={handleDestroy}>
-                    <DangerButton className={"w-max absolute top-3 right-3"}>Delete</DangerButton>
-                </form>
+                <div className={"flex flex-col gap-2 items-end absolute top-3 right-3"}>
+                    <form onSubmit={handleDestroy}>
+                        <DangerButton className={"w-max"}>Delete</DangerButton>
+                    </form>
+                    {!isExpired && (
+                        <form onSubmit={handleToggleJoinEvent}>
+                            {isUserInEvent ? (
+                                <DangerButton className={"w-max"}>Leave event</DangerButton>
+                            ) : (
+                                <PrimaryButton className={"w-max"}>Join event</PrimaryButton>
+                            )}
+                        </form>
+                    )}
+                </div>
             )}
         </div>
     );

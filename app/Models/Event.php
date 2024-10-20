@@ -22,13 +22,9 @@ class Event extends Model
         'users'
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'start' => 'datetime',
-            'users' => 'array'
-        ];
-    }
+    protected $casts = [
+        'start' => 'datetime'
+    ];
 
     public function getUsersAttribute()
     {
