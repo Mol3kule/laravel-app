@@ -8,4 +8,5 @@ export type PageProps<
         user: User;
     };
     ziggy: Config & { location: string };
+    translations?: Record<string, string>;
 };

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +17,7 @@ Route::get('/', function () {
 });
 
 Route::group([
-    'middleware' => ['auth', 'verified'],
+    'middleware' => ['auth', 'verified', 'locale'],
 ], function () {
     Route::get('/dashboard', [EventController::class, 'index'])->name('dashboard');
 
@@ -39,6 +40,8 @@ Route::group([
             return Inertia::render('Admin/UsersControlPanel');
         })->name('users_control_panel');
     });
+
+    Route::patch('/locale-switch', [LocaleController::class, 'switch'])->name('locale.switch');
 });
 
 Route::middleware('auth')->group(function () {

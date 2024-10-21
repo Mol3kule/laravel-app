@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class EventController extends Controller
@@ -15,7 +14,8 @@ class EventController extends Controller
     public function index(Request $request): \Inertia\Response
     {
         return Inertia::render('Dashboard', [
-            'data' => Event::all()
+            'data' => Event::all(),
+            'translations' => LocaleController::getTranslations('messages')
         ]);
     }
 
@@ -26,21 +26,19 @@ class EventController extends Controller
 
     public function createEvent(Request $request): \Illuminate\Http\RedirectResponse
     {
-        Log::debug($request);
-        
         $request->validate([
             'title' => 'required|string|min:3|max:40',
-            'description' => 'string',
-            'date_time' => 'date'
+            'description' => 'required|string',
+            'date' => 'date'
         ]);
-//        $event = Event::factory()->create([
-//            'title' => request('title'),
-//            'description' => request('description'),
-//            'date_time' => request('date_time')
-//        ])->toArray();
-//
-        return redirect()->back();
-//        return redirect()->route('event.view', ['id' => $event['id']]);
+
+        $event = Event::factory()->create([
+            'title' => request('title'),
+            'description' => request('description'),
+            'start' => request('date')
+        ])->toArray();
+
+        return redirect()->route('event.view', ['id' => $event['id']]);
     }
 
     public function getById(Request $request): \Inertia\Response|\Illuminate\Http\RedirectResponse
