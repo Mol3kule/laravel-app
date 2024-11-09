@@ -21,7 +21,7 @@ class EventController extends Controller
 
     public function createIndex(Request $request): \Inertia\Response
     {
-        return Inertia::render('Event/CreateEvent', []);
+        return Inertia::render('Event/CreateEvent', ['translations' => LocaleController::getTranslations('messages')]);
     }
 
     public function createEvent(Request $request): \Illuminate\Http\RedirectResponse
@@ -48,7 +48,8 @@ class EventController extends Controller
         }
 
         return Inertia::render('Event/Event', [
-            'data' => $event
+            'data' => $event,
+            'translations' => LocaleController::getTranslations('messages')
         ]);
     }
 

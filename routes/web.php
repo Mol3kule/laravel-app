@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\ProfileController;
@@ -36,9 +37,13 @@ Route::group([
         'prefix' => '/admin',
         'middleware' => 'type:admin'
     ], function () {
-        Route::get('/users_control_panel', function () {
-            return Inertia::render('Admin/UsersControlPanel');
-        })->name('users_control_panel');
+        Route::group([
+            'prefix' => '/users_control_panel'
+        ], function () {
+            Route::get('/', [AdminController::class, 'index'])->name('users_control_panel');
+            Route::get('/{id}', [AdminController::class, 'editIndex'])->name('admin.users_control_panel.edit');
+            Route::patch('/{id}', [AdminController::class, 'updateUser'])->name('admin.users_control_panel.update');
+        });
     });
 
     Route::patch('/locale-switch', [LocaleController::class, 'switch'])->name('locale.switch');

@@ -8,7 +8,7 @@ import {ToastContainer} from "react-toastify";
 import {LanguageSelector} from "@/Components/LanguageSelector";
 
 export default function Authenticated({header, children,}: PropsWithChildren<{ header?: ReactNode }>) {
-    const user = usePage().props.auth.user;
+    const {auth: {user}, translations} = usePage().props;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
@@ -31,7 +31,7 @@ export default function Authenticated({header, children,}: PropsWithChildren<{ h
                                         href={route('dashboard')}
                                         active={route().current('dashboard')}
                                     >
-                                        Dashboard
+                                        {translations?.dashboard}
                                     </NavLink>
                                     {user.type === 'admin' && (
                                         <>
@@ -39,7 +39,7 @@ export default function Authenticated({header, children,}: PropsWithChildren<{ h
                                                 href={route('users_control_panel')}
                                                 active={route().current('users_control_panel')}
                                             >
-                                                Users control panel
+                                                {translations?.users_control_panel}
                                             </NavLink>
                                         </>
                                     )}

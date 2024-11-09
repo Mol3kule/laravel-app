@@ -1,4 +1,7 @@
 {
   "dashboard": "Dashboard",
-  "create_event": "Create a new event"
+  "create_event": "Create a new event",
+  "leave_event": "Leave event",
+  "join_event": "Join event",
+  "users_control_panel": "Users control panel"
 }

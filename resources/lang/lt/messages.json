@@ -1,4 +1,7 @@
 {
   "dashboard": "Pagrindinis",
-  "create_event": "Sukurti naują konferenciją"
+  "create_event": "Sukurti naują konferenciją",
+  "leave_event": "Nedalyvauti konferencijoje",
+  "join_event": "Dalyvauti konferencijoje",
+  "users_control_panel": "Vartotojų valdymas"
 }

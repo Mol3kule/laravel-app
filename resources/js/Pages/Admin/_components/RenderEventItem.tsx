@@ -1,6 +1,6 @@
 import {Event} from "@/types/Event";
 import {User} from "@/types/User";
-import {Link, useForm} from "@inertiajs/react";
+import {Link, useForm, usePage} from "@inertiajs/react";
 import DangerButton from "@/Components/DangerButton";
 import {FormEvent, FormEventHandler} from "react";
 import PrimaryButton from "@/Components/PrimaryButton";
@@ -13,9 +13,11 @@ interface Props {
 }
 
 export const RenderEventItem = ({auth, data}: Props) => {
+    const {translations} = usePage().props;
     const {delete: destroy, patch} = useForm();
 
     const isInPage = route().current('event.view');
+    const isUser = auth.user.type === "user";
     const isAdmin = auth.user.type === 'admin';
 
     const isExpired = new Date(data.start).getTime() < Date.now();
@@ -43,60 +45,58 @@ export const RenderEventItem = ({auth, data}: Props) => {
             <span>Title: {data.title}</span>
             <span>Description: {data.description}</span>
             <span>Date: {new Date(data.start).toLocaleDateString()} {isExpired && '| Expired'}</span>
-            {auth.user.type !== 'user' && (
-                <>
-                    {!isInPage ? (
-                        <Link
-                            href={route('event.view', {id: Number(data.id)})}
-                            className={"text-gray-300 dark:text-gray-600 cursor-pointer w-max"}
-                        >
-                            Click for details
-                        </Link>
-                    ) : (
-                        <>
-                            {data.users.length > 0 ? (
-                                isAdmin ? (
-                                    <div className={"pl-2 grid"}>
-                                        {data.users.map((user, idx) => (
-                                            <form onSubmit={(e) => handleUserRemove(e, user.id)}
-                                                  key={`event_${data.id}_user_list_${idx}`}
-                                                  className={"flex gap-2 items-center"}>
-                                                <span>- {user.name}</span>
-                                                {isAdmin && (
-                                                    <DangerButton className={"bg-transparent"}>
-                                                        Remove User
-                                                    </DangerButton>
-                                                )}
-                                            </form>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <span
-                                        className={"border-t border-gray-100 dark:border-gray-700"}>{data.users.length} have joined this event.</span>
-                                )
+            <>
+                {!isInPage ? (
+                    <Link
+                        href={route('event.view', {id: Number(data.id)})}
+                        className={"text-gray-300 dark:text-gray-600 cursor-pointer w-max"}
+                    >
+                        Click for details
+                    </Link>
+                ) : (
+                    <>
+                        {data.users.length > 0 ? (
+                            !isUser ? (
+                                <div className={"pl-2 grid"}>
+                                    {data.users.map((user, idx) => (
+                                        <form onSubmit={(e) => handleUserRemove(e, user.id)}
+                                              key={`event_${data.id}_user_list_${idx}`}
+                                              className={"flex gap-2 items-center"}>
+                                            <span>- {user.name}</span>
+                                            {isAdmin && (
+                                                <DangerButton className={"bg-transparent"}>
+                                                    Remove User
+                                                </DangerButton>
+                                            )}
+                                        </form>
+                                    ))}
+                                </div>
                             ) : (
-                                <span className={"border-t border-gray-100 dark:border-gray-700"}>No users have joined this event.</span>
-                            )}
-                        </>
-                    )}
-                </>
-            )}
-            {isAdmin && isInPage && (
-                <div className={"flex flex-col gap-2 items-end absolute top-3 right-3"}>
+                                <span
+                                    className={"border-t border-gray-100 dark:border-gray-700"}>{data.users.length} have joined this event.</span>
+                            )
+                        ) : (
+                            <span className={"border-t border-gray-100 dark:border-gray-700"}>No users have joined this event.</span>
+                        )}
+                    </>
+                )}
+            </>
+            <div className={"flex flex-col gap-2 items-end absolute top-3 right-3"}>
+                {isAdmin && isInPage && (
                     <form onSubmit={handleDestroy}>
                         <DangerButton className={"w-max"}>Delete</DangerButton>
                     </form>
-                    {!isExpired && (
-                        <form onSubmit={handleToggleJoinEvent}>
-                            {isUserInEvent ? (
-                                <DangerButton className={"w-max"}>Leave event</DangerButton>
-                            ) : (
-                                <PrimaryButton className={"w-max"}>Join event</PrimaryButton>
-                            )}
-                        </form>
-                    )}
-                </div>
-            )}
+                )}
+                {!isExpired && isInPage && (
+                    <form onSubmit={handleToggleJoinEvent}>
+                        {isUserInEvent ? (
+                            <DangerButton className={"w-max"}>{translations?.leave_event}</DangerButton>
+                        ) : (
+                            <PrimaryButton className={"w-max"}>{translations?.join_event}</PrimaryButton>
+                        )}
+                    </form>
+                )}
+            </div>
         </div>
     );
 };

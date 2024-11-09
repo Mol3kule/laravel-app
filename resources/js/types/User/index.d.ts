@@ -1,4 +1,4 @@
-type UserType = 'user' | 'employer' | 'admin';
+export type UserType = 'user' | 'employer' | 'admin';
 
 export interface User {
     id: number;
@@ -6,4 +6,6 @@ export interface User {
     email: string;
     email_verified_at?: string;
     type: UserType;
+    created_at: Date;
+    updated_at: Date;
 }

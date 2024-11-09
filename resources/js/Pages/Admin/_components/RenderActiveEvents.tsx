@@ -8,7 +8,7 @@ interface Props {
 }
 export const RenderActiveEvents = ({ data }: Props) => {
     const [activeEvents, setActiveEvents] = useState<Event[]>([]);
-    const auth = usePage().props.auth;
+    const {auth, translations} = usePage().props;
 
     useEffect(() => {
         const { user } = auth;
